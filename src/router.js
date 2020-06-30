@@ -6,6 +6,7 @@ import GalleryView from './views/GalleryView.vue'
 import DetailsView from './views/DetailsView.vue'
 import ProfileView from './views/ProfileView.vue'
 import CartView from './views/CartView.vue'
+import CheckOutView from './views/CheckOutView.vue'
 
 Vue.use(Router);
 
@@ -43,5 +44,11 @@ export default new Router({
         name: 'cart',
         component: CartView
       },
+      {
+        path: '/checkout',
+        name: 'checkout',
+        component: CheckOutView
+      },
+      
       ]
 })

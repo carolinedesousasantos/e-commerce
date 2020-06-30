@@ -10,8 +10,9 @@ const Config = {
     subCategories: 'SubCategories',
     sizes: 'Sizes',
     products: 'Products',
-    details: 'ProductDetails'
+    details: 'ProductDetails',
 
+    saveItemsToCart:'SaveItemsToCart'
 
 }
 

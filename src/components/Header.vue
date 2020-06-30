@@ -49,8 +49,9 @@
 
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
+<!-- <router-link to="/"> -->
       <v-toolbar-title>E-commerce</v-toolbar-title>
-
+<!-- </router-link> -->
       <v-spacer></v-spacer>
 
       <v-toolbar
@@ -59,7 +60,7 @@
         dense
         min-width="350"
         max-width="350"
-        style="margin:20px 0 20px 0;"
+        style="padding-right: 10px;margin:20px 0px 20px 0;"
       >
         <v-autocomplete
           id="search"
@@ -76,15 +77,17 @@
           label="Search"
           append-icon="search"
         ></v-autocomplete>
-        <v-btn icon small @click="goToLogin">
-          <v-icon>person</v-icon>
-        </v-btn>
         <v-btn icon small>
-          <v-icon>mdi-heart</v-icon>
+          <v-icon >mdi-heart</v-icon>
         </v-btn>
-        <v-btn icon small @click="goToCart">
-           <v-icon>fas fa-shopping-bag</v-icon>
-          <v-badge color="green" :content="badgeContent" overlap ></v-badge>  
+        <v-btn icon small @click="goToLogin">
+          <v-icon  v-if="isLogged =='false'">person</v-icon>
+
+          <v-icon   v-if="isLogged =='true'" @click="logout">fas fa-sign-out-alt</v-icon>
+        </v-btn>
+         <v-btn icon small @click="goToCart">
+          <v-icon >fas fa-shopping-bag</v-icon>
+          <v-badge color="green" :content="badgeContent" overlap></v-badge>
         </v-btn>
       </v-toolbar>
       <template v-slot:extension>
@@ -125,7 +128,7 @@
 </style>
 <script>
 import Config from "@/config";
-import { bus } from '@/main';
+import { bus } from "@/main";
 
 export default {
   props: {
@@ -138,16 +141,18 @@ export default {
     },
     cartItem: {
       type: Function,
-      default: function(){}
+      default: function() {}
     }
   },
-   created (){
-    bus.$on('updateCart', (data) => {
-    this.badgeContent = data.length;
-    })
+  created() {
+    bus.$on("updateCart", data => {
+      this.badgeContent = data.length;
+      console.log(data.length,"data.length")
+    });
   },
   data: function() {
     return {
+      isLogged: localStorage.isLogged,
       subcategoryId: 0,
       item: 1,
       showIconMenu: false,
@@ -155,10 +160,7 @@ export default {
       drawerRight: null,
       right: false,
       left: false,
-      buscador: [
-        { text: "", icon: "" },
-
-      ],
+      buscador: [{ text: "", icon: "" }],
       loading: false,
       search: null,
       select: null,
@@ -169,7 +171,7 @@ export default {
       badgeContent: 0
     };
   },
-  
+
   mounted: function() {
     if (
       this.$vuetify.breakpoint.sm == true ||
@@ -181,6 +183,9 @@ export default {
     this.getSubCategories();
   },
   methods: {
+    logout(){
+      localStorage.isLogged = false;
+    },
     filterSubCategory(item) {
       if (this.$route.name != "gallery") {
         this.$router.push("/");

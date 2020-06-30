@@ -30,20 +30,8 @@
                 class="caption font-weight-light"
                 style="text-decoration:line-through;"
                 v-if="product.offer > 0"
-              >&euro;{{product.price}} &nbsp;</span>
-              <span
-                class="font-weight-bold pink--text"
-              >&euro;{{(product.price - (product.offer/100) * product.price)}}</span>
-
-              <v-btn
-                small
-                class="float-right"
-                icon
-                :color="product.bagColor"
-                @click="addToCart(product)"
-              >
-                <v-icon>fas fa-shopping-bag</v-icon>
-              </v-btn>
+              >{{product.realPrice}}&euro; &nbsp;</span>
+              <span class="font-weight-bold pink--text">{{product.priceWithDiscount}}&euro;</span>
               <v-btn
                 small
                 class="float-right"
@@ -106,9 +94,9 @@ export default {
     };
   },
   mounted: function() {
-    if (localStorage.cartList != "undefined") {
+    if (localStorage.cartList) {
       this.cartList = JSON.parse(localStorage.cartList);
-      bus.$emit("updateCart", JSON.parse(localStorage.cartList));
+      bus.$emit("updateCart", this.cartList);
     }
 
     this.getProducts();
@@ -122,12 +110,6 @@ export default {
     }
   },
   methods: {
-    addToCart(item) {
-      item.bagColor = "orange";
-      this.cartList.push(item);
-      localStorage.cartList = JSON.stringify(this.cartList);
-      bus.$emit("updateCart", this.cartList);
-    },
     goToDetails(productDetails) {
       this.$router.push(`/details?id=${productDetails.id}`);
     },

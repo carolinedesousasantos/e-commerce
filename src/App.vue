@@ -36,6 +36,24 @@
         </v-card-text>
       </v-card>
     </v-footer>
+    <v-bottom-sheet v-model="sheet">
+      <v-sheet class="text-center" height="150px">
+        <div>
+          <v-btn class="mt-6" icon @click="sheet = !sheet" fixed right>
+            <v-icon right dark color="primary">fas fa-times</v-icon>
+          </v-btn>
+        </div>
+
+        <v-btn class="mt-6" color="primary" @click="sheet = !sheet">
+          ACCEPTAR
+          <v-icon right dark>fas fa-check</v-icon>
+        </v-btn>
+        <div class="py-3">
+          Utilizamos cookies para mejorar su experiencia de compra.
+          <a href>Aviso legal.</a>
+        </div>
+      </v-sheet>
+    </v-bottom-sheet>
   </v-app>
 </template>
 
@@ -44,6 +62,7 @@ export default {
   name: "common-footer",
   data: function() {
     return {
+      sheet: true,
       icons: [
         "fab fa-facebook",
         "fab fa-twitter",
@@ -53,6 +72,9 @@ export default {
       ],
       links: ["Home", "About Us", "Team", "Services", "Blog", "Contact Us"]
     };
+  },
+  mounted: function() {
+    localStorage.isLogged = false;
   }
 };
 </script>

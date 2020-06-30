@@ -2,9 +2,12 @@
   <div>
     <v-dialog v-model="dialog" width="500" persistent>
       <v-tabs background-color="primary" dark grow>
-        <v-tab @change="cleanData">Recover password    <v-btn absolute dark  text right color="primary" @click="dialog = false">
-        <v-icon color="white"  >mdi-close</v-icon>
-      </v-btn></v-tab>
+        <v-tab @change="cleanData">
+          Recover password
+          <v-btn absolute dark text right color="primary" @click="dialog = false">
+            <v-icon color="white">mdi-close</v-icon>
+          </v-btn>
+        </v-tab>
         <v-tab-item>
           <v-card elevation="0" width="500">
             <v-card-text>
@@ -210,17 +213,12 @@
   </div>
 </template>
 <style scoped>
-/* .container {
-  margin-top: 200px;
-  margin-bottom: 50px;
-} */
 .v-card {
   margin: auto !important;
   border-radius: 10px !important;
 }
 </style>
 <script>
-
 import Config from "@/config.js";
 import { bus } from "@/main";
 
@@ -270,8 +268,8 @@ export default {
     }
   },
   mounted: function() {
-     if (localStorage.cartList != "undefined") {
-      bus.$emit("updateCart",  JSON.parse(localStorage.cartList));
+    if (localStorage.cartList != "undefined") {
+      bus.$emit("updateCart", JSON.parse(localStorage.cartList));
     }
   },
   methods: {
@@ -307,7 +305,10 @@ export default {
             } else {
               this.showAlert = false;
               this.message = "";
-              console.log("redirect");
+              localStorage.isLogged = true;
+              if (localStorage.cartList != "undefined") {
+                this.$router.push("/cart");
+              }
             }
           })
           .catch(error => {
@@ -346,6 +347,11 @@ export default {
               this.alertType = "error";
             } else {
               this.alertType = "success";
+              localStorage.isLogged = true;
+
+              if (localStorage.cartList != "undefined") {
+                this.$router.push("/cart");
+              }
             }
           })
           .catch(error => {
@@ -357,12 +363,12 @@ export default {
       }
     },
     sendEmail() {
-     var self = this;
+      var self = this;
       var url = Config.server + Config.sendEmailRecoverPassword;
       var data = {
         email: this.email
       };
-      console.log(data," data");
+      console.log(data, " data");
       if (this.$refs.formSendEmail.validate()) {
         this.loading = true;
         this.$axios
@@ -371,7 +377,7 @@ export default {
             console.log(response.data);
             this.showAlert = true;
             this.message = response.data.msg;
-            console.log(response.data.error," response.data.error");
+            console.log(response.data.error, " response.data.error");
             if (response.data.error) {
               this.alertType = "error";
             } else {

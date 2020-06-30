@@ -32,10 +32,8 @@
                     class="caption font-weight-light"
                     style="text-decoration:line-through;"
                     v-if="details.offer > 0"
-                  >&euro;{{details.price}} &nbsp;</span>
-                  <span
-                    class="font-weight-bold pink--text"
-                  >&euro;{{(details.price - (details.offer/100) * details.price)}}</span>
+                  >{{details.realPrice}} &nbsp;</span>
+                  <span class="font-weight-bold pink--text">{{details.priceWithDiscount}}&euro;</span>
                   <v-btn
                     small
                     class="float-right"
@@ -97,28 +95,30 @@ export default {
       details: {},
       slide: [],
       productSelected: [],
-      counter: 0
+      counter: 0,
+      productsList: []
     };
   },
   mounted: function() {
     this.getDetails(this.$route.query.id);
     this.getSizes();
 
-    if (localStorage.cartList != undefined) {
-     this.productsList = JSON.parse(localStorage.cartList);
-    bus.$emit("updateCart", JSON.parse(localStorage.cartList));
+    if (localStorage.cartList) {
+      this.productsList = JSON.parse(localStorage.cartList);
+      bus.$emit("updateCart", this.productsList);
     }
   },
   methods: {
     addToCart(args) {
       this.details["sizeInfo"] = args;
-
       this.productSelected.push(this.details);
+      this.productsList.push(this.productSelected);
+      localStorage.cartList = JSON.stringify(this.productsList);
       this.sizeSelected = [];
-      localStorage.cartList = JSON.stringify(this.productSelected);
-
-      console.log(this.productSelected, " this.productSelected");
+      this.productSelected = [];
+      bus.$emit("updateCart", this.productsList);
     },
+
     openSizeSelector() {
       document.getElementById("sizeList").click();
     },
@@ -141,7 +141,6 @@ export default {
       this.$axios
         .post(url, data)
         .then(response => {
-          console.log(response.data);
           this.details = response.data.result[0];
           this.slide.push(
             response.data.result[0].imageSrc,

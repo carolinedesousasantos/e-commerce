@@ -32,10 +32,7 @@ export default {
     }
   },
   methods: {
-    teste(e){
-console.log(e," teste");
-    },
-    productId: function(productsSelected) {
+    productId(productsSelected) {
       
       localStorage.setItem(
         "productsSelected",

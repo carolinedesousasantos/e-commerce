@@ -2,6 +2,8 @@
 
 #Prerequires
 
+Go to https://github.com/carolinedesousasantos/e-commerce_api and follow the instructions for install the server api
+
 
 #How to Play
 
